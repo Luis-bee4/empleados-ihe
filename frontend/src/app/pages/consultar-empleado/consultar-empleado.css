@@ -1,0 +1,90 @@
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.busqueda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+input {
+  width: 280px;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid #788596;
+  border-radius: 5px;
+  font: inherit;
+  text-transform: uppercase;
+}
+
+input[aria-invalid="true"] {
+  border: 2px solid #b42318;
+}
+
+button {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 5px;
+  background: #17365d;
+  color: white;
+  font: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+input:focus-visible,
+button:focus-visible {
+  outline: 3px solid #5395d9;
+  outline-offset: 2px;
+}
+
+.mensaje {
+  margin-top: 20px;
+  padding: 12px;
+  border: 1px solid currentColor;
+  border-radius: 5px;
+}
+
+.error {
+  color: #b42318;
+}
+
+.exito {
+  color: #176536;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: minmax(130px, 200px) minmax(0, 1fr);
+  gap: 12px;
+  padding: 20px;
+  background: #f3f6fa;
+  border-radius: 8px;
+}
+
+dt {
+  font-weight: bold;
+}
+
+dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 500px) {
+  dl {
+    grid-template-columns: 1fr;
+  }
+
+  dd {
+    margin-bottom: 10px;
+  }
+}

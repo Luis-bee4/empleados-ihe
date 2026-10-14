@@ -1,0 +1,125 @@
+<h2>Lista de empleados</h2>
+
+<form [formGroup]="filtros" (ngSubmit)="buscar()">
+  <div class="filtros">
+    @for (campo of camposFiltro; track campo.clave) {
+      <div>
+        <label [for]="'filtro-' + campo.clave">{{ campo.etiqueta }}</label>
+        <input
+          [id]="'filtro-' + campo.clave"
+          type="text"
+          [formControlName]="campo.clave">
+      </div>
+    }
+  </div>
+
+  <div class="acciones">
+    <button type="submit" [disabled]="cargando()">Buscar</button>
+    <button type="button" (click)="limpiar()" [disabled]="cargando()">
+      Limpiar filtros
+    </button>
+  </div>
+</form>
+
+<div class="acciones">
+  <label for="tamanio">Registros por página</label>
+  <select id="tamanio"
+          [value]="tamanio"
+          (change)="cambiarTamanio($event)"
+          [disabled]="cargando()">
+    <option value="5">5</option>
+    <option value="10">10</option>
+    <option value="20">20</option>
+    <option value="50">50</option>
+  </select>
+</div>
+
+@if (cargando()) {
+  <p role="status">Cargando empleados…</p>
+}
+
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+  <button type="button" (click)="cargar()">Reintentar</button>
+}
+
+@if (resultado(); as datos) {
+  <p role="status">
+    <strong>Total de registros encontrados: {{ datos.totalElementos }}</strong>
+  </p>
+
+  <div class="tabla-contenedor">
+    <table>
+      <caption>Información principal de empleados</caption>
+      <thead>
+        <tr>
+          @for (columna of columnas; track columna.clave) {
+            <th scope="col"
+                [attr.aria-sort]="ordenarPor === columna.clave
+                  ? (direccion === 'ASC' ? 'ascending' : 'descending')
+                  : 'none'">
+              <button type="button"
+                      class="orden"
+                      (click)="ordenar(columna.clave)">
+                {{ columna.etiqueta }}
+                @if (ordenarPor === columna.clave) {
+                  {{ direccion === 'ASC' ? '↑' : '↓' }}
+                }
+              </button>
+            </th>
+          }
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (empleado of datos.empleados; track empleado.numeroEmpleado) {
+          <tr>
+            <td>{{ empleado.numeroEmpleado }}</td>
+            <td>{{ empleado.curp }}</td>
+            <td>{{ empleado.nombreCompleto }}</td>
+            <td>{{ empleado.areaAdscripcion }}</td>
+            <td>{{ empleado.puesto }}</td>
+            <td>{{ empleado.fechaIngreso | date:'dd/MM/yyyy' }}</td>
+            <td>{{ empleado.estatus }}</td>
+            <td>{{ empleado.fechaRegistro | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="8">No se encontraron empleados.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <nav class="paginacion" aria-label="Paginación de empleados">
+    <button type="button"
+            (click)="cambiarPagina(0)"
+            [disabled]="datos.primera || datos.totalPaginas === 0">
+      Primera
+    </button>
+
+    <button type="button"
+            (click)="cambiarPagina(datos.pagina - 1)"
+            [disabled]="datos.primera || datos.totalPaginas === 0">
+      Anterior
+    </button>
+
+    <span>
+      Página {{ datos.totalPaginas === 0 ? 0 : datos.pagina + 1 }}
+      de {{ datos.totalPaginas }}
+    </span>
+
+    <button type="button"
+            (click)="cambiarPagina(datos.pagina + 1)"
+            [disabled]="datos.ultima || datos.totalPaginas === 0">
+      Siguiente
+    </button>
+
+    <button type="button"
+            (click)="cambiarPagina(datos.totalPaginas - 1)"
+            [disabled]="datos.ultima || datos.totalPaginas === 0">
+      Última
+    </button>
+  </nav>
+}

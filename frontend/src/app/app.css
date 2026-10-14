@@ -1,0 +1,45 @@
+:host {
+  display: block;
+  font-family: Arial, sans-serif;
+  color: #243247;
+}
+
+header {
+  padding: 24px;
+  background: #17365d;
+  color: white;
+}
+
+h1 {
+  margin: 0 0 20px;
+  font-size: 24px;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+nav a {
+  padding: 10px 14px;
+  border-radius: 6px;
+  color: white;
+  text-decoration: none;
+}
+
+nav a:hover,
+nav a.activo {
+  background: #2d5685;
+}
+
+nav a:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 3px;
+}
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}

@@ -1,0 +1,19 @@
+# Backend: archivos compilados.
+backend/target/
+
+# Frontend: dependencias y archivos generados.
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/coverage/
+
+# Configuración local y secretos.
+.env
+.env.*
+!.env.example
+application-local.properties
+
+# Registros y archivos del sistema.
+*.log
+Thumbs.db
+.DS_Store

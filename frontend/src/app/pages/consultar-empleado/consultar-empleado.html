@@ -1,0 +1,88 @@
+<h2>Consultar empleado por CURP</h2>
+
+<form [formGroup]="formulario" (ngSubmit)="buscar()" novalidate>
+  <label for="curp">CURP *</label>
+
+  <div class="busqueda">
+    <input
+      id="curp"
+      type="text"
+      formControlName="curp"
+      maxlength="18"
+      required
+      placeholder="Captura los 18 caracteres"
+      [attr.aria-invalid]="errorCurp ? 'true' : 'false'"
+      [attr.aria-describedby]="errorCurp ? 'curp-error' : null">
+
+    <button type="submit" [disabled]="buscando()">
+      {{ buscando() ? 'Buscando…' : 'Buscar' }}
+    </button>
+  </div>
+
+  @if (errorCurp) {
+    <p id="curp-error" class="error">{{ errorCurp }}</p>
+  }
+</form>
+
+@if (mensaje()) {
+  <p class="mensaje"
+     [class.error]="esError()"
+     [class.exito]="!esError()"
+     role="status"
+     aria-live="polite">
+    {{ mensaje() }}
+  </p>
+}
+
+@if (empleado(); as datos) {
+  <section aria-labelledby="titulo-datos">
+    <h3 id="titulo-datos">Datos del empleado</h3>
+
+    <dl>
+      <dt>ID</dt>
+      <dd>{{ datos.id }}</dd>
+
+      <dt>Número de empleado</dt>
+      <dd>{{ datos.numeroEmpleado }}</dd>
+
+      <dt>CURP</dt>
+      <dd>{{ datos.curp }}</dd>
+
+      <dt>Nombre(s)</dt>
+      <dd>{{ datos.nombres }}</dd>
+
+      <dt>Primer apellido</dt>
+      <dd>{{ datos.primerApellido }}</dd>
+
+      <dt>Segundo apellido</dt>
+      <dd>{{ datos.segundoApellido || 'No registrado' }}</dd>
+
+      <dt>Fecha de nacimiento</dt>
+      <dd>{{ datos.fechaNacimiento | date:'dd/MM/yyyy' }}</dd>
+
+      <dt>Sexo</dt>
+      <dd>{{ datos.sexo }}</dd>
+
+      <dt>Correo electrónico</dt>
+      <dd>{{ datos.correoElectronico }}</dd>
+
+      <dt>Teléfono</dt>
+      <dd>{{ datos.telefono || 'No registrado' }}</dd>
+
+      <dt>Área de adscripción</dt>
+      <dd>{{ datos.areaAdscripcion }}</dd>
+
+      <dt>Puesto</dt>
+      <dd>{{ datos.puesto }}</dd>
+
+      <dt>Fecha de ingreso</dt>
+      <dd>{{ datos.fechaIngreso | date:'dd/MM/yyyy' }}</dd>
+
+      <dt>Estatus</dt>
+      <dd>{{ datos.estatus }}</dd>
+
+      <dt>Fecha de registro</dt>
+      <dd>{{ datos.fechaRegistro | date:'dd/MM/yyyy HH:mm:ss' }}</dd>
+    </dl>
+  </section>
+}

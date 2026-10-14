@@ -1,0 +1,55 @@
+<h2>Registrar empleado</h2>
+<p>Los campos con * son obligatorios.</p>
+
+@if (mensaje) {
+  <p role="status"
+     aria-live="polite"
+     class="mensaje"
+     [class.exito]="exito"
+     [class.error]="!exito">
+    {{ mensaje }}
+  </p>
+}
+<form [formGroup]="formulario" (ngSubmit)="registrar()" novalidate>
+
+  <div class="campos">
+    @for (campo of campos; track campo.clave) {
+      <div class="campo">
+        <label [for]="campo.clave">
+          {{ campo.etiqueta }} {{ campo.obligatorio ? '*' : '(opcional)' }}
+        </label>
+
+       <input
+       [id]="campo.clave"
+       [type]="campo.tipo"
+       [formControlName]="campo.clave"
+       [attr.maxlength]="campo.tipo === 'date' ? null : campo.maximo"
+       [attr.required]="campo.obligatorio ? '' : null"
+       [attr.aria-invalid]="errorCampo(campo.clave) ? 'true' : 'false'"
+        [attr.aria-describedby]="errorCampo(campo.clave) ? campo.clave + '-error' : null">
+
+        @if (errorCampo(campo.clave)) {
+          <span class="error" [id]="campo.clave + '-error'">
+            {{ errorCampo(campo.clave) }}
+          </span>
+        }
+      </div>
+    }
+     <!-- Número de empleado después de Estatus. -->
+  <div class="campo">
+    <label for="numeroEmpleadoAutomatico">Número de empleado</label>
+    <input
+      id="numeroEmpleadoAutomatico"
+      type="text"
+      value="Se asignará automáticamente"
+      readonly>
+  </div>
+  </div>
+
+
+  <p>La fecha de registro se asignará automáticamente al guardar.</p>
+
+  <button type="submit" [disabled]="guardando">
+    {{ guardando ? 'Guardando…' : 'Registrar empleado' }}
+  </button>
+</form>

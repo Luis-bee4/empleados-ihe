@@ -1,0 +1,33 @@
+<header>
+  <h1>Administración de empleados IHE</h1>
+
+  <!-- Navegación disponible desde todas las pantallas. -->
+  <nav aria-label="Menú principal">
+    <a routerLink="/"
+       routerLinkActive="activo"
+       [routerLinkActiveOptions]="{ exact: true }">
+      Inicio
+    </a>
+
+    <a routerLink="/registrar-empleado" routerLinkActive="activo">
+      Registrar empleado
+    </a>
+
+    <a routerLink="/consultar-empleado" routerLinkActive="activo">
+      Consultar empleado
+    </a>
+
+    <a routerLink="/lista-empleados" routerLinkActive="activo">
+      Lista de empleados
+    </a>
+
+    <a routerLink="/reportes" routerLinkActive="activo">
+      Reportes
+    </a>
+  </nav>
+</header>
+
+<main>
+  <!-- Aquí Angular muestra la pantalla de la ruta seleccionada. -->
+  <router-outlet></router-outlet>
+</main>

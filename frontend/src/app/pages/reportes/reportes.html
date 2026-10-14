@@ -1,0 +1,119 @@
+<h2>Reportes de empleados</h2>
+<p>Consulta empleados por fecha de ingreso.</p>
+
+<form [formGroup]="formulario" (ngSubmit)="generarReporte()" novalidate>
+  <div class="fechas">
+    <div>
+      <label for="fechaInicial">Fecha inicial *</label>
+      <input
+        id="fechaInicial"
+        type="date"
+        formControlName="fechaInicial"
+        required
+        aria-describedby="error-inicial">
+      <span id="error-inicial" class="error">
+        {{ errorFecha('fechaInicial') }}
+      </span>
+    </div>
+
+    <div>
+      <label for="fechaFinal">Fecha final *</label>
+      <input
+        id="fechaFinal"
+        type="date"
+        formControlName="fechaFinal"
+        required
+        aria-describedby="error-final">
+      <span id="error-final" class="error">
+        {{ errorFecha('fechaFinal') }}
+      </span>
+    </div>
+  </div>
+
+  @if (formulario.hasError('periodoInvalido')
+       && (formulario.controls.fechaInicial.touched
+           || formulario.controls.fechaFinal.touched)) {
+    <p class="error">
+      La fecha inicial no puede ser posterior a la final.
+    </p>
+  }
+
+  <div class="acciones">
+    <button type="submit" [disabled]="generando() || exportando()">
+      {{ generando() ? 'Generando…' : 'Generar reporte' }}
+    </button>
+
+    <button
+      type="button"
+      (click)="exportarCsv()"
+      [disabled]="generando() || exportando()">
+      {{ exportando() ? 'Exportando…' : 'Exportar CSV' }}
+    </button>
+  </div>
+</form>
+
+@if (mensaje()) {
+  <p role="status" aria-live="polite" [class.error]="esError()">
+    {{ mensaje() }}
+  </p>
+}
+
+@if (reporte(); as datos) {
+  <h3>Resultado del reporte</h3>
+
+  <p>
+    Periodo:
+    {{ datos.fechaInicial | date:'dd/MM/yyyy' }}
+    al {{ datos.fechaFinal | date:'dd/MM/yyyy' }}
+  </p>
+
+  <p role="status">
+    <strong>
+      Total de registros encontrados: {{ datos.totalEmpleados }}
+    </strong>
+  </p>
+
+  <div class="tabla-contenedor">
+    <table>
+      <caption>Empleados del periodo solicitado</caption>
+      <thead>
+        <tr>
+          <th scope="col">Número de empleado</th>
+          <th scope="col">CURP</th>
+          <th scope="col">Nombre completo</th>
+          <th scope="col">Área</th>
+          <th scope="col">Puesto</th>
+          <th scope="col">Fecha de ingreso</th>
+          <th scope="col">Estatus</th>
+          <th scope="col">Fecha de registro</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (empleado of datos.empleados; track empleado.id) {
+          <tr>
+            <td>{{ empleado.numeroEmpleado }}</td>
+            <td>{{ empleado.curp }}</td>
+            <td>
+              {{ empleado.nombres }} {{ empleado.primerApellido }}
+              {{ empleado.segundoApellido || '' }}
+            </td>
+            <td>{{ empleado.areaAdscripcion }}</td>
+            <td>{{ empleado.puesto }}</td>
+            <td>{{ empleado.fechaIngreso | date:'dd/MM/yyyy' }}</td>
+            <td>{{ empleado.estatus }}</td>
+            <td>
+              {{ empleado.fechaRegistro | date:'dd/MM/yyyy HH:mm:ss' }}
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="8">
+              No se encontraron empleados en el periodo solicitado.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
